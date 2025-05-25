@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧟‍♂️ 좀비 아포칼립스 생존 테스트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c1810, #8B0000);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            text-align: center;
+            border: 2px solid #8B0000;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: flicker 2s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.8); }
+            100% { text-shadow: 2px 2px 8px rgba(255, 0, 0, 1); }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #ff6b6b;
+        }
+        
+        .stage-info {
+            background: rgba(139, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ff6b6b;
+        }
+        
+        .scenario {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .choice-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+            background: linear-gradient(45deg, #ff5252, #ff7979);
+        }
+        
+        .death-screen {
+            background: rgba(139, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid #ff0000;
+            animation: death-pulse 1s ease-in-out;
+        }
+        
+        @keyframes death-pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .death-title {
+            font-size: 2em;
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .death-reason {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .survival-time {
+            font-size: 1.5em;
+            color: #ffff00;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .success-screen {
+            background: linear-gradient(45deg, #00ff00, #32cd32);
+            color: #000;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            animation: success-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes success-glow {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+            100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+        }
+        
+        .restart-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-btn {
+            padding: 20px 40px;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        .stage-counter {
+            font-size: 1.1em;
+            color: #ffff00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="startScreen" class="start-screen">
+            <div class="title">🧟‍♂️ 좀비 아포칼립스</div>
+            <div class="subtitle">생존 테스트</div>
+            <p style="font-size: 1.1em; line-height: 1.6; margin: 20px 0;">
+                좀비가 창궐한 세상...<br>
+                당신은 얼마나 오래 살아남을 수 있을까요?<br><br>
+                <strong style="color: #ff6b6b;">⚠️ 주의: 한 번의 잘못된 선택이 즉시 죽음을 의미합니다!</strong>
+            </p>
+            <button class="start-btn" onclick="startGame()">🎮 게임 시작</button>
+        </div>
+
+        <div id="gameScreen" style="display: none;">
+            <div class="stage-info">
+                <div class="stage-counter">Stage <span id="currentStage">1</span></div>
+            </div>
+            
+            <div class="scenario" id="scenario"></div>
+            
+            <div class="choices" id="choices"></div>
+        </div>
+
+        <div id="resultScreen" style="display: none;">
+            <button class="restart-btn" onclick="restartGame()">🔄&nbsp;&nbsp;다시 도전하기</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 0;
+        
+        const scenarios = [
+            {
+                text: "🏠 좀비 바이러스가 퍼진 첫날 밤...<br>집 밖에서 아이가 우는 소리가 들립니다.<br><strong>문을 열어서 아이를 구해줄까요?</strong>",
+                choices: [
+                    { text: "🚪 예 - 착한 마음으로 문을 열어준다", death: true, reason: "아이인 줄 알았지만 좀비가 목소리를 흉내낸 거였습니다.<br>'고마워요 아저씨~' 하더니 당신의 목을 물어뜯더군요.", time: "0분" },
+                    { text: "😰 아니오 - 무시하고 문을 잠근다", death: false }
+                ]
+            },
+            {
+                text: "🔦 어둠 속에서 손전등을 발견했습니다.<br>불빛이 있으면 더 안전할 것 같은데요.<br><strong>손전등을 켜서 주변을 밝힐까요?</strong>",
+                choices: [
+                    { text: "💡 예 - 안전을 위해 불을 켠다", death: true, reason: "불빛을 보고 몰려든 좀비들이 '깜짝파티'를 열어줬습니다.<br>당신이 오늘의 주인공이네요! (메인 요리로)", time: "10분" },
+                    { text: "🌙 아니오 - 어둠에 적응한다", death: false }
+                ]
+            },
+            {
+                text: "📞 갑자기 집 전화가 울립니다.<br>누군가 도움을 요청하는 것일 수도 있어요.<br><strong>전화를 받아볼까요?</strong>",
+                choices: [
+                    { text: "📞 아니오 - 전화를 무시한다", death: true, reason: "전화를 안 받았더니 집 밖의 생존자가 포기하고 떠났습니다.<br>그들이 가져간 건 구조 헬기 정보였네요. 이제 혼자 남았어요.", time: "1시간" },
+                    { text: "☎️ 예 - 전화를 받는다", death: false }
+                ]
+            },
+            {
+                text: "🍞 냉장고에서 신선한 음식과 곰팡이 핀 빵을 발견했습니다.<br>신선한 음식이 당연히 더 좋겠죠?<br><strong>신선한 음식을 먹을까요?</strong>",
+                choices: [
+                    { text: "🥗 예 - 신선한 음식을 먹는다", death: true, reason: "신선한 음식에는 좀비 바이러스가 아직 활발하게 살아있었습니다.<br>곰팡이 핀 빵은 바이러스가 죽어있었는데... 선택을 잘못했네요.", time: "30분" },
+                    { text: "🍞 아니오 - 곰팡이 빵을 먹는다", death: false }
+                ]
+            },
+            {
+                text: "🚗 밖에 두 대의 차가 있습니다.<br>한 대는 깨끗하고 새 차, 다른 하나는 더럽고 오래된 차입니다.<br><strong>깨끗한 새 차를 타고 갈까요?</strong>",
+                choices: [
+                    { text: "✨ 예 - 깨끗한 새 차를 선택한다", death: true, reason: "새 차는 좀비들이 인간을 유인하기 위한 미끼였습니다.<br>시동을 걸자마자 '좀비 내비'가 켜지며 묘지로 안내하더군요.", time: "2시간" },
+                    { text: "🚙 아니오 - 더러운 오래된 차를 탄다", death: false }
+                ]
+            },
+            {
+                text: "👨‍⚕️ 의사 가운을 입은 사람이 창문을 두드립니다.<br>'안전한 치료소가 있어요!'라고 말하네요.<br><strong>의사를 믿고 따라갈까요?</strong>",
+                choices: [
+                    { text: "🏥 예 - 의사를 믿고 따라간다", death: true, reason: "'의사'는 치과의사였고, 좀비들의 이빨 관리를 해주고 있었습니다.<br>'다음 환자분~' 하며 당신을 진료대에... 아프지 않을 거에요, 금방이니까.", time: "4시간" },
+                    { text: "😤 아니오 - 의심스러워서 거절한다", death: false }
+                ]
+            },
+            {
+                text: "🔒 지하실과 옥상, 두 곳 중 하나로 피해야 합니다.<br>지하실이 더 안전해 보이죠?<br><strong>지하실로 숨을까요?</strong>",
+                choices: [
+                    { text: "⬇️ 예 - 안전한 지하실로 간다", death: true, reason: "지하실은 좀비들의 '저장고'였습니다.<br>신선한 인간을 보관하는 곳이었네요. 당신도 이제 '냉장보관' 됩니다.", time: "6시간" },
+                    { text: "⬆️ 아니오 - 위험해 보이는 옥상으로 간다", death: false }
+                ]
+            },
+            {
+                text: "💊 '좀비 치료제'라고 적힌 약과 '독'이라고 적힌 약이 있습니다.<br>당연히 치료제를 먹어야겠죠?<br><strong>치료제를 먹을까요?</strong>",
+                choices: [
+                    { text: "💉 예 - 좀비 치료제를 먹는다", death: true, reason: "좀비들이 라벨을 바꿔놨습니다. 치료제가 진짜 독이었어요.<br>'속았지롱~' 하며 좀비들이 깔깔거리는 소리가 마지막이었습니다.", time: "12시간" },
+                    { text: "☠️ 아니오 - '독'이라고 적힌 약을 먹는다", death: false }
+                ]
+            },
+            {
+                text: "👮‍♂️ 경찰복을 입은 사람이 '안전지대로 대피하세요!'라고 외칩니다.<br>경찰이니까 믿을 만하겠죠?<br><strong>경찰을 따라갈까요?</strong>",
+                choices: [
+                    { text: "🚔 예 - 경찰을 믿고 따라간다", death: true, reason: "'경찰'은 좀비가 코스프레한 거였습니다.<br>'체포합니다! 맛있어 보인다는 죄목으로!' 하며 수갑 대신 이빨을 채우더군요.", time: "1일" },
+                    { text: "🏃‍♂️ 아니오 - 혼자서 도망간다", death: false }
+                ]
+            },
+            {
+                text: "🎉 축하합니다!<br><br>당신은 모든 심리적 함정을 피해 <strong>3일</strong>을 버텼습니다!<br><br>🏆 <strong>의심병 환자... 아니 생존 천재!</strong><br><br>당신의 극도로 의심 많은 성격과 반사회적 성향 덕분에<br>착한 마음, 상식적 판단, 권위에 대한 믿음 등<br>모든 '인간다운' 감정을 억누르고 살아남았습니다!<br><br>평상시라면 문제가 될 성격이지만... 좀비 세상에서는 완벽하네요! 👏",
+                isSuccess: true
+            }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            currentStage = 0;
+            showStage();
+        }
+
+        function showStage() {
+            const stage = scenarios[currentStage];
+            document.getElementById('currentStage').textContent = currentStage + 1;
+            document.getElementById('scenario').innerHTML = stage.text;
+            
+            if (stage.isSuccess) {
+                showSuccess(stage.text);
+                return;
+            }
+            
+            const choicesDiv = document.getElementById('choices');
+            choicesDiv.innerHTML = '';
+            
+            stage.choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.innerHTML = choice.text;
+                button.onclick = () => makeChoice(choice);
+                choicesDiv.appendChild(button);
+            });
+        }
+
+        function makeChoice(choice) {
+            if (choice.death) {
+                showDeath(choice.reason, choice.time);
+            } else {
+                currentStage++;
+                showStage();
+            }
+        }
+
+        function showDeath(reason, time) {
+            document.getElementById('gameScreen').style.display = 'none';
+            const resultScreen = document.getElementById('resultScreen');
+            
+            resultScreen.innerHTML = `
+                <div class="death-screen">
+                    <div class="death-title">💀 사망하셨습니다! 💀</div>
+                    <div class="death-reason">${reason}</div>
+                    <div class="survival-time">⏰ 생존 시간: ${time}</div>
+                    <div style="font-size: 1.1em; margin-top: 15px;">
+                        Stage ${currentStage + 1}에서 게임 오버!
+                    </div>
+                </div>
+                <button class="restart-btn" onclick="restartGame()">🔄&nbsp;&nbsp;다시 도전하기</button>
+            `;
+            
+            resultScreen.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            document.getElementById('gameScreen').style.display = 'none';
+            const resultScreen = document.getElementById('resultScreen');
+            
+            resultScreen.innerHTML = `
+                <div class="success-screen">
+                    <div style="font-size: 2em; margin-bottom: 20px;">🎊 완벽한 생존! 🎊</div>
+                    <div style="font-size: 1.2em; line-height: 1.6;">${message}</div>
+                </div>
+                <button class="restart-btn" onclick="restartGame()">🔄&nbsp;&nbsp;다시 도전하기</button>
+            `;
+            
+            resultScreen.style.display = 'block';
+        }
+
+        function restartGame() {
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            currentStage = 0;
+        }
+    </script>
+</body>
+</html>
